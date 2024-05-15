@@ -5,11 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import tw.edu.pu.csim.gesture.ui.theme.GestureTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +41,8 @@ class MainActivity : ComponentActivity() {
                     //Greeting("Android")
                     //PointerEvents()
                     Tap()
+                    Drag_Horizontal()
+                    Drag_Vertical()
                 }
             }
         }
@@ -70,28 +77,60 @@ fun Tap() {
                     )}*/
                 .pointerInput(Unit) {
                     detectDragGesturesAfterLongPress(
-                        onDrag = { change, dragAmount -> offset2+=dragAmount},
+                        onDrag = { change, dragAmount -> offset2 += dragAmount },
                         onDragStart = {
                             offset1 = it
-                            offset2 = it},
-                        onDragEnd = {if (offset2.x >= offset1.x){
-                            msg = "長按後向右拖曳"
-                            Number ++
-                            if (Number>5){Number=0}
-                        }
-                        else{
-                            msg = "長按後向左拖曳"
-                            Number --
-                            if (Number<0){Number=5}
-                        }
+                            offset2 = it
+                        },
+                        onDragEnd = {
+                            if (offset2.x >= offset1.x) {
+                                msg = "長按後向右拖曳"
+                                Number++
+                                if (Number > 5) {
+                                    Number = 0
+                                }
+                            } else {
+                                msg = "長按後向左拖曳"
+                                Number--
+                                if (Number < 0) {
+                                    Number = 5
+                                }
+                            }
                         }
                     )
                 }
-
-
-
-
         )
     }
 }
+@Composable
+fun Drag_Horizontal() {
+    var offsetX by remember { mutableStateOf(0f) }
+    Text(
+        text = "水平拖曳",
+        modifier = Modifier
+            .offset { IntOffset(offsetX.toInt(), 80) }
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    offsetX += delta
+                }
+            )
+    )
+}
+@Composable
+fun Drag_Vertical() {
+    var offsetY by remember { mutableStateOf(0f) }
+    Text(
+        text = "垂直拖曳",
+        modifier = Modifier
+            .offset { IntOffset(500, offsetY.toInt()) }
+            .draggable(
+                orientation = Orientation.Vertical,
+                state = rememberDraggableState { delta ->
+                    offsetY += delta
+                }
+            )
+    )
+}
+
 

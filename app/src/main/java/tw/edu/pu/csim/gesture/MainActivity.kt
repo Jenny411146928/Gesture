@@ -50,7 +50,7 @@ fun Tap() {
 
         Image(
             painter = painterResource(id = R.drawable.pu0),
-            contentDescription = "靜宜之美",
+            contentDescription = "靜宜美",
             modifier = Modifier
                 .fillMaxSize()
                 /*.pointerInput(Unit) {

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,14 +53,23 @@ fun Tap() {
             contentDescription = "靜宜之美",
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(Unit) {
+                /*.pointerInput(Unit) {
                     detectTapGestures(
                         onTap = {msg = "後觸發onTap(短按)"},
                         onDoubleTap = {msg = "雙擊"},
                         onLongPress = {msg = "長按"},
                         onPress = {msg = "先觸發onPress(按下)"}
+                    )}*/
+                .pointerInput(Unit) {
+                    detectDragGesturesAfterLongPress(
+                        onDrag = { change, dragAmount -> msg="長按後拖曳進行中"},
+                        onDragStart = {msg="長按後拖曳開始"},
+                        onDragEnd = {msg="長按後拖曳結束"},
                     )
                 }
+
+
+
 
         )
     }
